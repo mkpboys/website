@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>🎊Enga ooru Thiruvizha 2023🎉</h1>
+    </header>
+
+    <div class="container">
+
+        <h2>Image Gallery</h2>
+        <div id="slideDiv">
+            <div id="slider">
+                <ul id="slideWrap">
+                    <!-- Images will be loaded dynamically here -->
+                </ul>
+            </div>
+        </div>
+        <h2>Video Gallery</h2>
+        <div class="gallery" id="videoGallery">
+            <!-- Video gallery will be generated here -->
+        </div>
+    </div>
+
+
+    <script>
+        var slider = document.getElementById("slider");
+        var sliderWidth = slider.offsetWidth;
+        var slideList = document.getElementById("slideWrap");
+        var count = 1;
+        var items;
+
+        function nextSlide() {
+            if (count < items) {
+                slideList.style.left = "-" + count * sliderWidth + "px";
+                count++;
+            } else if (count = items) {
+                slideList.style.left = "0px";
+                count = 1;
+            }
+        }
+
+        setInterval(function () {
+            nextSlide()
+        }, 3000);
+
+        let videoCount;
+
+       
+
+        function fetchVideoCount(owner, repo, path) {
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    videoCount = data.filter(item => item.type === 'file').length;
+                    console.log(`Number of videos in ${path}:`, videoCount);
+                    fetchVideos();
+                })
+                .catch(error => {
+                    console.error('Error fetching video count:', error);
+                });
+        }
+
+        fetchVideoCount('mkpboys', 'website', 'videos23');
+
+       
+        function fetchVideos() {
+            const videoGallery = document.getElementById('videoGallery');
+
+            for (let i = 1; i <= videoCount; i++) {
+                const video = document.createElement('video');
+                video.controls = true;
+                const source = document.createElement('source');
+                source.src = `./videos23/video (${i}).mp4`;
+                source.type = 'video/mp4';
+                video.appendChild(source);
+
+                const galleryItem = document.createElement('div');
+                galleryItem.classList.add('gallery-item');
+                galleryItem.appendChild(video);
+
+                videoGallery.appendChild(galleryItem);
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>
