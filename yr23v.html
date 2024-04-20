@@ -15,47 +15,14 @@
     </header>
 
     <div class="container">
-
-        <h2>Image Gallery</h2>
-        <div id="slideDiv">
-            <div id="slider">
-                <ul id="slideWrap">
-                    <!-- Images will be loaded dynamically here -->
-                </ul>
-            </div>
-        </div>
         <h2>Video Gallery</h2>
         <div class="gallery" id="videoGallery">
             <!-- Video gallery will be generated here -->
         </div>
     </div>
 
-
     <script>
-        var slider = document.getElementById("slider");
-        var sliderWidth = slider.offsetWidth;
-        var slideList = document.getElementById("slideWrap");
-        var count = 1;
-        var items;
-
-        function nextSlide() {
-            if (count < items) {
-                slideList.style.left = "-" + count * sliderWidth + "px";
-                count++;
-            } else if (count = items) {
-                slideList.style.left = "0px";
-                count = 1;
-            }
-        }
-
-        setInterval(function () {
-            nextSlide()
-        }, 3000);
-
         let videoCount;
-
-       
-
         function fetchVideoCount(owner, repo, path) {
             const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
             fetch(apiUrl)
@@ -77,7 +44,6 @@
 
         fetchVideoCount('mkpboys', 'website', 'videos23');
 
-       
         function fetchVideos() {
             const videoGallery = document.getElementById('videoGallery');
 
@@ -86,7 +52,6 @@
                 video.controls = true;
                 const source = document.createElement('source');
                 source.src = `./videos23/video (${i}).mp4`;
-                source.type = 'video/mp4';
                 video.appendChild(source);
 
                 const galleryItem = document.createElement('div');
@@ -96,8 +61,6 @@
                 videoGallery.appendChild(galleryItem);
             }
         }
-
-
     </script>
 </body>
 

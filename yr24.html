@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1>🎊Enga ooru Thiruvizha 2024🎉</h1>
+    </header>
+
+    <div class="container">
+
+        <h2>Image Gallery 2024</h2>
+        <div id="slideDiv">
+            <div id="slider">
+                <ul id="slideWrap">
+                    <!-- Images will be loaded dynamically here -->
+                </ul>
+            </div>
+        </div>
+        <div class="gallery" id="imageGallery">
+            <!-- Images will be loaded dynamically here -->
+        </div>
+
+    </div> 
+
+    <script>
+        var slider = document.getElementById("slider");
+        var sliderWidth = slider.offsetWidth;
+        var slideList = document.getElementById("slideWrap");
+        var count = 1;
+        var items;
+
+        function nextSlide() {
+            if (count < items) {
+                slideList.style.left = "-" + count * sliderWidth + "px";
+                count++;
+            } else if (count = items) {
+                slideList.style.left = "0px";
+                count = 1;
+            }
+        }
+
+        setInterval(function () {
+            nextSlide()
+        }, 3000);
+
+        let imageCount;
+
+        function fetchImageCount(owner, repo, path) {
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    imageCount = data.filter(item => item.type === 'file').length;
+                    console.log(`Number of images in ${path}:`, imageCount);
+                    fetchImagesForSlider(); 
+                    fetchImages(); 
+                })
+                .catch(error => {
+                    console.error('Error fetching image count:', error);
+                });
+        }
+
+        function fetchVideoCount(owner, repo, path) {
+            const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+            fetch(apiUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    videoCount = data.filter(item => item.type === 'file').length;
+                    console.log(`Number of videos in ${path}:`, videoCount);
+                    fetchVideos();
+                })
+                .catch(error => {
+                    console.error('Error fetching video count:', error);
+                });
+        }
+
+        fetchImageCount('mkpboys', 'website', 'images24');
+
+        function fetchImagesForSlider() {
+            for (let i = 1; i <= imageCount; i++) {
+                const img = document.createElement('img');
+                img.src = `./images24/image (${i}).jpg`;
+                img.alt = `Image ${i}`;
+
+                const li = document.createElement('li');
+                li.appendChild(img);
+
+                slideList.appendChild(li);
+            }
+            items = slideList.querySelectorAll("li").length;
+        }
+
+        function fetchImages() {
+            const imageGallery = document.getElementById('imageGallery');
+            for (let i = 1; i <= imageCount; i++) {
+                const img = document.createElement('img');
+                img.src = `./images24/image (${i}).jpg`;
+                img.alt = `Image ${i}`;
+
+                const galleryItem = document.createElement('div');
+                galleryItem.classList.add('gallery-item');
+                galleryItem.appendChild(img);
+
+                imageGallery.appendChild(galleryItem);
+            }
+        }
+
+    </script>
+</body>
+
+</html>
